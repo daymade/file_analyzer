@@ -13,46 +13,62 @@ A command-line tool to analyze file contents, useful for investigating potential
 ## Usage
 
 ```bash
-python file_analyzer.py <command> <file_path> [options]
+python file_analyzer.py <command> <path> [path...] [options]
 ```
+
+### Arguments
+
+*   `<path> [path...]`: One or more paths to files or directories to analyze.
 
 ### Commands
 
-*   `analyze <file_path> [options]`: 
+*   `analyze <path> [path...] [options]`:
     Performs general analysis (entropy, text fragments, BitLocker check).
     *   `--encodings <enc1> <enc2> ...`: Specify encodings to try (default: utf-8 gb18030 gbk big5).
     *   `--min-len <length>`: Minimum length for text fragments (default: 4).
     *   `--limit <number>`: Max fragments to show per encoding (default: 5).
+    *   `--recursive`: Recursively search directories for files to analyze.
 
-*   `hexview <file_path> [options]`: 
+*   `hexview <path> [path...] [options]`:
     Displays hexadecimal view.
     *   `--bytes <num>`: Bytes to show from header/middle/footer (default: 256).
     *   `--line-bytes <num>`: Bytes per line in hex view (default: 16).
+    *   `--recursive`: Recursively search directories for files to view.
 
-*   `extract-text <file_path> [options]`: 
+*   `extract-text <path> [path...] [options]`:
     Extracts potential text fragments.
     *   `--encodings <enc1> <enc2> ...`: Specify encodings (default: utf-8 gb18030 gbk big5 shift_jis).
     *   `--min-len <length>`: Minimum length for fragments (default: 4).
     *   `--limit <number>`: Max fragments to show per encoding (default: 20).
+    *   `--recursive`: Recursively search directories for files to extract text from.
 
-*   `check-bitlocker <file_path>`: 
+*   `check-bitlocker <path> [path...] [options]`:
     Checks for BitLocker signatures and high entropy.
+    *   `--recursive`: Recursively search directories for files to check.
 
 ### Examples
 
 ```bash
-# Perform general analysis on a file
+# Perform general analysis on a single file
 python file_analyzer.py analyze recovered_file.dat
 
-# View hex data of a file
-python file_analyzer.py hexview image.jpg --bytes 512
+# Analyze all files directly inside the 'data' directory
+python file_analyzer.py analyze data/
 
-# Extract text using only GBK and GB18030
-python file_analyzer.py extract-text document.unknown --encodings gbk gb18030
+# Recursively analyze all files within the 'project_files' directory
+python file_analyzer.py analyze project_files/ --recursive
 
-# Check for BitLocker signatures
-python file_analyzer.py check-bitlocker partition.img
-```
+# Analyze specific files
+python file_analyzer.py analyze file1.bin file2.tmp ../other_dir/file3.dat
+
+# View hex data of specific files
+python file_analyzer.py hexview image.jpg doc.unknown
+
+# Extract text using only GBK and GB18030 from all files in current dir
+python file_analyzer.py extract-text . --encodings gbk gb18030
+
+# Recursively check for BitLocker signatures in a directory
+python file_analyzer.py check-bitlocker /mnt/partition --recursive
 
 ## Requirements
 
