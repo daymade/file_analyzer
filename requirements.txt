@@ -1,0 +1,2 @@
+# No external libraries required for the basic functionality
+# Add 'chardet' if more advanced encoding detection is desired later
